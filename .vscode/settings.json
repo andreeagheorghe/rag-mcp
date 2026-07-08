@@ -1,0 +1,13 @@
+{
+    "cSpell.words": [
+        "fastmcp",
+        "nomic",
+        "ollama",
+        "qwen",
+        "vectorstore",
+        "vectorstores",
+        "webui"
+    ],
+    "isort.path": ["/Users/andreea/envs/3.12.2-rag/venv/bin/isort"],
+    "python.defaultInterpreterPath": "/Users/andreea/envs/3.12.2-rag/venv/bin/python"
+}

@@ -1,0 +1,14 @@
+# start open webui chat interface
+docker compose up -d
+# open
+http://localhost:3000
+# stop open webui chat interface
+docker compose down
+
+# add embedding model for ollama
+ollama pull nomic-embed-text
+
+# local network ollama on linux with small gpu
+http://192.168.66.199:11434
+# get models list
+curl http://192.168.66.199:11434/api/tag
