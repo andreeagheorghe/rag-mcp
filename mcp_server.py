@@ -6,7 +6,7 @@ from langchain_chroma import Chroma
 
 mcp = FastMCP("rag-server")
 
-CHROMA_DIR = Path(__file__).resolve().parent / "chroma_db"
+CHROMA_DIR = Path(__file__).resolve().parent / "lc_chroma_db"
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text", base_url="http://192.168.66.199:11434")
 vectorstore = Chroma(persist_directory=str(CHROMA_DIR), embedding_function=embeddings)

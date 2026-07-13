@@ -7,17 +7,17 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 
-CHROMA_DIR = Path(__file__).resolve().parent / "chroma_db"
+CHROMA_DIR = Path(__file__).resolve().parent.parent / "lc_chroma_db"
 shutil.rmtree(CHROMA_DIR, ignore_errors=True)
 
 docs = []
 
-for file_path in Path("raw/").glob("**/*.md"):
+for file_path in Path(__file__).resolve().parent.parent.glob("raw/**/*.md"):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
         docs.append(Document(page_content=content, metadata={"source": str(file_path)}))
 
-for file_path in Path("raw/").glob("**/*.pdf"):
+for file_path in Path(__file__).resolve().parent.parent.glob("raw/**/*.pdf"):
     reader = PdfReader(file_path)
     for page_num, page in enumerate(reader.pages, 1):
         content = page.extract_text()

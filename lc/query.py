@@ -6,7 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text", base_url="http://192.168.66.199:11434")
-vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
+vectorstore = Chroma(persist_directory="../lc_chroma_db", embedding_function=embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 llm = OllamaLLM(model="qwen2.5:7b", base_url="http://192.168.66.199:11434")

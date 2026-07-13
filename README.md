@@ -64,29 +64,29 @@ Pick 5 to 10 PDFs or Markdown/text files.
 
 Place them in a `raw/` folder.
 
-**3. Ingest and embed (`ingest.py`)**
+**3. Ingest and embed (`lc/ingest.py`)**
 
 What the script does, in order:
-1. Clear out any existing `chroma_db/` directory so re-running the script doesn't duplicate chunks.
+1. Clear out any existing `lc_chroma_db/` directory so re-running the script doesn't duplicate chunks.
 2. Load documents from `raw/`: read `.md` files as plain text, and extract text page-by-page from `.pdf` files, tagging each chunk with its source filename (and page number for PDFs).
 3. Split the loaded documents into overlapping chunks (~500 characters, 50 character overlap) so retrieval can return focused excerpts instead of whole documents.
 4. Create embeddings for each chunk using the `nomic-embed-text` model via Ollama.
-5. Create a vector store: persist the chunks and their embeddings to disk in `chroma_db/` using Chroma.
+5. Create a vector store: persist the chunks and their embeddings to disk in `lc_chroma_db/` using Chroma.
 6. Print how many chunks were ingested.
 
-Always resolve `chroma_db/` to an absolute path (relative to the script's own location), since this script and `mcp_server.py` may be launched from different working directories and must both point at the same store.
+Always resolve `lc_chroma_db/` to an absolute path (relative to the script's own location), since this script and `mcp_server.py` may be launched from different working directories and must both point at the same store.
 
-**4. Query the RAG pipeline (`query.py`)**
+**4. Query the RAG pipeline (`lc/query.py`)**
 
 What the script does, in order:
 1. Create the same embeddings model (`nomic-embed-text`) used during ingestion — queries and documents must be embedded the same way to be comparable. The embeddings model is used to embed the query.
-2. Open the existing vector store from `chroma_db/`.
+2. Open the existing vector store from `lc_chroma_db/`.
 3. Create a retriever from the vector store that, given a query, returns the top-k (e.g. 3) most similar chunks.
 4. Create the generation model: `qwen2.5:7b` via Ollama.
 5. Build a chain: retriever fetches context for the question → a prompt template combines the question and retrieved context → the LLM generates an answer → the output is parsed to plain text.
 6. Invoke the chain with a question and print the answer.
 
-Run `ingest.py` once to build the vector store, then `query.py` to test retrieval.
+Run `lc/ingest.py` once to build the vector store, then `lc/query.py` to test retrieval.
 
 ---
 
@@ -120,7 +120,7 @@ pip install mcp
 What the script does, in order:
 1. Create a FastMCP server instance named `rag-server`.
 2. Create the same embeddings model (`nomic-embed-text`) used during ingestion.
-3. Open the existing vector store from `chroma_db/`, resolved to an absolute path relative to the script's own location (Claude Desktop may launch this script from an arbitrary working directory, so a relative path would fail or point at the wrong — possibly read-only — location).
+3. Open the existing vector store from `lc_chroma_db/`, resolved to an absolute path relative to the script's own location (Claude Desktop may launch this script from an arbitrary working directory, so a relative path would fail or point at the wrong — possibly read-only — location).
 4. Register one tool, `search_documents`, that takes a query string, retrieves the top 3 most similar chunks from the vector store, and returns them formatted with their source filename and page number.
 5. Run the server over the `stdio` transport when executed directly, so Claude Desktop can spawn it as a subprocess and communicate over stdin/stdout.
 
